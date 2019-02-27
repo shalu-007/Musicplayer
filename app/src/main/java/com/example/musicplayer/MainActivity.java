@@ -44,16 +44,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onStartClick(View v) {
+        Toast.makeText(this, ""+mStarted, Toast.LENGTH_SHORT).show();
         if (!mStarted) {
             Intent i = new Intent(MainActivity.this, MyService.class);
             bindService(i, mServiceConnection, BIND_AUTO_CREATE);
-            mStarted = true;
+            mStarted=true;
         } else {
             onStopClick(v);
         }
     }
 
     public void onStopClick(View v) {
+        Toast.makeText(this, ""+mStarted, Toast.LENGTH_SHORT).show();
         if (mStarted) {
             unbindService(mServiceConnection);
             mStarted = false;
@@ -66,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             vMyLocalBinder = (MyService.MyLocalBinder) service;
             mMyService = vMyLocalBinder.getService();
+            mStarted=true;
             Toast.makeText(mMyService, "Inside", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             vMyLocalBinder = null;
+            mStarted=false;
         }
     };
 }
